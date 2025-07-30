@@ -3,12 +3,15 @@ Page({
   data: {
     currentDate: '',
     winningNumbers: [],
-    luckyCount: 0
+    luckyCount: 0,
+    recommendationNumbers: [],
+    generating: false
   },
 
   onLoad() {
     this.setCurrentDate();
     this.fetchInfo();
+    this.generateRecommendation();
   },
 
   setCurrentDate() {
@@ -60,6 +63,44 @@ Page({
       },
       fail: () => {
         wx.showToast({ title: '信息获取失败', icon: 'none' });
+      }
+    });
+  },
+
+  generateRecommendation() {
+    this.setData({ generating: true });
+    
+    wx.cloud.callFunction({
+      name: 'test1',
+      data: {
+        count: 1
+      },
+      success: (res) => {
+        console.log('云函数调用成功:', res);
+        if (res.result && res.result.success && res.result.data && res.result.data.length > 0) {
+          const recommendation = res.result.data[0];
+          if (recommendation.redBalls && Array.isArray(recommendation.redBalls)) {
+            // 将红球数组转换为字符串数组，并添加一个蓝球（随机生成）
+            const redNumbers = recommendation.redBalls.map(num => String(num).padStart(2, '0'));
+            const blueNumber = String(Math.floor(Math.random() * 16) + 1).padStart(2, '0');
+            const numbers = [...redNumbers, blueNumber];
+            
+            this.setData({
+              recommendationNumbers: numbers
+            });
+          } else {
+            wx.showToast({ title: '推荐数据格式错误', icon: 'none' });
+          }
+        } else {
+          wx.showToast({ title: '推荐生成失败', icon: 'none' });
+        }
+      },
+      fail: (err) => {
+        console.error('云函数调用失败:', err);
+        wx.showToast({ title: '推荐生成失败', icon: 'none' });
+      },
+      complete: () => {
+        this.setData({ generating: false });
       }
     });
   }

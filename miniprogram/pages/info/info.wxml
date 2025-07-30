@@ -25,5 +25,17 @@
         </view>
       </view>
     </view>
+    
+    <view class="recommendation-section">
+      <view class="section-title">智能推荐号码</view>
+      <view class="lottery-numbers">
+        <view wx:for="{{recommendationNumbers}}" wx:key="index" class="lottery-ball {{index < 6 ? 'red' : 'blue'}}">
+          {{item}}
+        </view>
+      </view>
+      <button class="refresh-btn" bindtap="generateRecommendation" disabled="{{generating}}">
+        {{generating ? '生成中...' : '重新生成'}}
+      </button>
+    </view>
   </view>
 </scroll-view> 
