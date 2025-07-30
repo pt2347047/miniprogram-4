@@ -1,0 +1,22 @@
+<!--lucky.wxml-->
+<navigation-bar title="每日幸运" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <textarea class="desc-input" placeholder="幸运提示" value="{{desc}}" bindinput="onInput" auto-height="true" />
+    <button class="submit-btn" bindtap="onSubmit" disabled="{{loading}}">
+      {{loading ? '幸运生成中...' : (hasGenerated ? '再试一次' : '试试手气')}}
+    </button>
+    <view wx:if="{{lotteryNumbers && lotteryNumbers.length > 0}}" class="lottery-container">
+      <view class="lottery-title">神秘数字</view>
+      <view class="lottery-numbers">
+        <view wx:for="{{lotteryNumbers}}" wx:key="index" class="lottery-ball {{index < 6 ? 'red' : 'blue'}}">
+          {{item}}
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{recommendation}}" class="recommendation-container">
+      <view class="recommendation-title">推荐理由</view>
+      <view class="recommendation-text">{{recommendation}}</view>
+    </view>
+  </view>
+</scroll-view> 

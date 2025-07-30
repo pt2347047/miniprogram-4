@@ -1,0 +1,29 @@
+<!--info.wxml-->
+<navigation-bar title="实用信息" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <view class="date-section">
+      <text class="date-text">{{currentDate}}</text>
+    </view>
+    
+    <view class="lottery-section">
+      <view class="section-title">最新中奖号码</view>
+      <view class="lottery-numbers">
+        <view wx:for="{{winningNumbers}}" wx:key="index" class="lottery-ball {{index < 6 ? 'red' : 'blue'}}">
+          {{item}}
+        </view>
+      </view>
+    </view>
+    
+    <view class="stats-section">
+      <view class="stats-container">
+        <view class="stats-item">
+          <text class="stats-label">幸运人数</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-value">{{luckyCount}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view> 

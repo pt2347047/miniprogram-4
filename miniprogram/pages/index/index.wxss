@@ -1,0 +1,78 @@
+/**index.wxss**/
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.title-section {
+  text-align: center;
+  margin-bottom: 60rpx;
+  padding: 40rpx 0;
+}
+
+.title-container {
+  position: relative;
+  display: inline-block;
+}
+
+.title-image {
+  width: 800rpx;
+  height: 300rpx;
+  margin-bottom: 20rpx;
+}
+
+.title-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #333;
+  z-index: 10;
+}
+
+.function-grid {
+  width: 100%;
+  padding: 0 40rpx;
+}
+
+.function-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40rpx;
+}
+
+.function-item {
+  width: 45%;
+  height: 200rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+.function-item:active {
+  transform: scale(0.95);
+  box-shadow: 0 4rpx 10rpx rgba(102, 126, 234, 0.3);
+}
+
+.function-icon {
+  font-size: 60rpx;
+  margin-bottom: 20rpx;
+}
+
+.function-text {
+  font-size: 32rpx;
+  color: white;
+  font-weight: 500;
+}

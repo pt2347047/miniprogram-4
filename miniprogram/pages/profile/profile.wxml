@@ -1,0 +1,13 @@
+<!--profile.wxml-->
+<navigation-bar title="个人信息" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <view class="profile-section">
+      <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+      <view class="user-info">
+        <text class="user-name">{{userInfo.name}}</text>
+        <text class="join-time">加入时间：{{userInfo.joinTime}}</text>
+      </view>
+    </view>
+  </view>
+</scroll-view> 

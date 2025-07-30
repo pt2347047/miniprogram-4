@@ -1,0 +1,48 @@
+/**profile.wxss**/
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 40rpx;
+  background: white;
+  border-radius: 20rpx;
+  margin: 40rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
+}
+
+.user-avatar {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 50%;
+  margin-bottom: 40rpx;
+  background: #f0f0f0;
+  border: 8rpx solid #f8f9fa;
+}
+
+.user-info {
+  text-align: center;
+}
+
+.user-name {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.join-time {
+  font-size: 28rpx;
+  color: #666;
+  display: block;
+} 

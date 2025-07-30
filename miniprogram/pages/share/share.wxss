@@ -1,0 +1,93 @@
+/**share.wxss**/
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.share-list {
+  padding: 20rpx;
+}
+
+.share-item {
+  background: white;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
+}
+
+.share-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.user-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+  background: #f0f0f0;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.share-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.share-content {
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.share-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.like-btn {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 20rpx;
+  border-radius: 20rpx;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.like-btn:active {
+  background: #e9ecef;
+}
+
+.like-icon {
+  font-size: 32rpx;
+  margin-right: 10rpx;
+  transition: all 0.3s ease;
+}
+
+.like-icon.liked {
+  transform: scale(1.2);
+}
+
+.like-count {
+  font-size: 28rpx;
+  color: #666;
+} 
