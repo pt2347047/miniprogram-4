@@ -2,6 +2,7 @@
 <navigation-bar title="个人信息" back="{{false}}" color="black" background="#FFF"></navigation-bar>
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="container">
+    <!-- 用户信息区域 -->
     <view class="profile-section">
       <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
       <view class="user-info">
@@ -9,5 +10,87 @@
         <text class="join-time">加入时间：{{userInfo.joinTime}}</text>
       </view>
     </view>
+
+    <!-- 幸运列表功能区域 -->
+    <view class="lucky-list-section">
+      <view class="section-header">
+        <text class="section-title">我的幸运列表</text>
+      </view>
+      
+      <!-- 幸运列表 -->
+      <view class="lucky-list" wx:if="{{luckyList.length > 0}}">
+        <view wx:for="{{luckyList}}" wx:key="index" class="lucky-item" wx:if="{{index >= (currentPage - 1) * pageSize && index < currentPage * pageSize}}">
+          <view class="lottery-numbers">
+            <view wx:for="{{item.redBalls}}" wx:for-item="ball" wx:key="ballIndex" class="lottery-ball red" bindtap="editLuckyNumber" data-index="{{index}}" data-ball-index="{{ballIndex}}" data-is-red="true">
+              {{ball < 10 ? '0' + ball : ball}}
+            </view>
+            <view class="lottery-ball blue" bindtap="editLuckyNumber" data-index="{{index}}" data-ball-index="6" data-is-red="false">
+              {{item.blueBall < 10 ? '0' + item.blueBall : item.blueBall}}
+            </view>
+          </view>
+          <view class="lucky-actions">
+            <view class="action-icon delete-icon" bindtap="deleteLuckyNumber" data-index="{{index}}">×</view>
+            <view class="action-icon top-icon" bindtap="moveToTop" data-index="{{index}}">↑</view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 空状态 -->
+      <view wx:if="{{luckyList.length === 0}}" class="empty-state">
+        <text class="empty-text">暂无幸运号码</text>
+        <text class="empty-hint">前往实用工具生成幸运号码</text>
+      </view>
+      
+      <!-- 分页控制 -->
+      <view wx:if="{{totalPages > 1}}" class="pagination">
+        <button class="page-btn" bindtap="changePage" data-page="{{currentPage - 1}}" disabled="{{currentPage <= 1}}">上一页</button>
+        <text class="page-info">{{currentPage}} / {{totalPages}}</text>
+        <button class="page-btn" bindtap="changePage" data-page="{{currentPage + 1}}" disabled="{{currentPage >= totalPages}}">下一页</button>
+      </view>
+      
+      <!-- 功能按钮 -->
+      <view class="function-buttons">
+        <button class="function-btn generate-btn" bindtap="generateImage">生成图片</button>
+      </view>
+    </view>
   </view>
-</scroll-view> 
+</scroll-view>
+
+<!-- Canvas用于生成图片 -->
+<canvas type="2d" id="imageCanvas" style="position: fixed; top: -9999px; left: -9999px; width: 750px; height: 1000px;"></canvas>
+
+<!-- 红球选择器 -->
+<view wx:if="{{showRedSelector}}" class="selector-overlay">
+  <view class="selector-container">
+    <view class="selector-title">选择红球号码</view>
+    <view class="selector-balls">
+      <view 
+        wx:for="{{redBallOptions}}" 
+        wx:key="value" 
+        class="selector-ball red"
+        bindtap="onRedOptionTap"
+        data-value="{{item.value}}"
+      >
+        {{item.value < 10 ? '0' + item.value : item.value}}
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 蓝球选择器 -->
+<view wx:if="{{showBlueSelector}}" class="selector-overlay">
+  <view class="selector-container">
+    <view class="selector-title">选择蓝球号码</view>
+    <view class="selector-balls">
+      <view 
+        wx:for="{{blueBallOptions}}" 
+        wx:key="value" 
+        class="selector-ball blue"
+        bindtap="onBlueOptionTap"
+        data-value="{{item.value}}"
+      >
+        {{item.value < 10 ? '0' + item.value : item.value}}
+      </view>
+    </view>
+  </view>
+</view> 

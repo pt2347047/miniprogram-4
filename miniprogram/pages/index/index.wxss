@@ -4,6 +4,59 @@ page {
   display: flex;
   flex-direction: column;
 }
+
+/* 公告栏样式 */
+.announcement-bar {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+  padding: 20rpx 30rpx;
+  font-size: 24rpx;
+  line-height: 1.4;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
+  z-index: 100;
+}
+
+.announcement-bar.top {
+  position: sticky;
+  top: 0;
+}
+
+.announcement-bar.bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.announcement-icon {
+  font-size: 28rpx;
+  margin-right: 15rpx;
+  flex-shrink: 0;
+}
+
+.announcement-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+.announcement-text {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scroll-text 20s linear infinite;
+}
+
+@keyframes scroll-text {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 .scrollarea {
   flex: 1;
   overflow-y: hidden;
@@ -75,4 +128,9 @@ page {
   font-size: 32rpx;
   color: white;
   font-weight: 500;
+}
+
+/* 为底部公告栏留出空间 */
+.container {
+  padding-bottom: 120rpx;
 }

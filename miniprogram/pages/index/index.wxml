@@ -1,5 +1,14 @@
 <!--index.wxml-->
 <navigation-bar title="每日幸运社" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+
+<!-- 上方公告栏 -->
+<view class="announcement-bar top">
+  <view class="announcement-icon">📢</view>
+  <view class="announcement-content">
+    <text class="announcement-text">{{announcement}}</text>
+  </view>
+</view>
+
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="container">
     <!-- 标题图片区域 -->
@@ -35,3 +44,11 @@
     </view>
   </view>
 </scroll-view>
+
+<!-- 下方公告栏 -->
+<view class="announcement-bar bottom">
+  <view class="announcement-icon">📢</view>
+  <view class="announcement-content">
+    <text class="announcement-text">{{announcement}}</text>
+  </view>
+</view>

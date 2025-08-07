@@ -2,7 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/lucky/lucky",
-    "pages/share/share",
+    "pages/tools/tools",
     "pages/info/info",
     "pages/profile/profile"
   ],
@@ -29,8 +29,8 @@
         "selectedIconPath": "images/lucky-active.png"
       },
       {
-        "pagePath": "pages/share/share",
-        "text": "每日分享",
+        "pagePath": "pages/tools/tools",
+        "text": "实用工具",
         "iconPath": "images/share.png",
         "selectedIconPath": "images/share-active.png"
       },
@@ -62,5 +62,10 @@
   },
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.writePhotosAlbum": {
+      "desc": "用于保存幸运号码图片到相册"
+    }
+  }
 }

@@ -1,22 +1,75 @@
 <!--lucky.wxml-->
 <navigation-bar title="每日幸运" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+
+<!-- Tab切换 -->
+<view class="tab-container">
+  <view class="tab-item {{activeTab === 'lucky' ? 'active' : ''}}" bindtap="switchTab" data-tab="lucky">
+    每日幸运
+  </view>
+  <view class="tab-item {{activeTab === 'share' ? 'active' : ''}}" bindtap="switchTab" data-tab="share">
+    每日分享
+  </view>
+</view>
+
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="container">
-    <textarea class="desc-input" placeholder="幸运提示" value="{{desc}}" bindinput="onInput" auto-height="true" />
-    <button class="submit-btn" bindtap="onSubmit" disabled="{{loading}}">
-      {{loading ? '幸运生成中...' : (hasGenerated ? '再试一次' : '试试手气')}}
-    </button>
-    <view wx:if="{{lotteryNumbers && lotteryNumbers.length > 0}}" class="lottery-container">
-      <view class="lottery-title">神秘数字</view>
-      <view class="lottery-numbers">
-        <view wx:for="{{lotteryNumbers}}" wx:key="index" class="lottery-ball {{index < 6 ? 'red' : 'blue'}}">
-          {{item}}
+    <!-- 每日幸运 Tab -->
+    <view wx:if="{{activeTab === 'lucky'}}" class="tab-content">
+      <!-- 输入描述区域 -->
+      <view class="input-container">
+        <view class="input-title">描述你的愿望或当前状态</view>
+        <textarea
+          class="desc-input"
+          placeholder="请输入你的描述，例如：今天心情不错，希望有好运气..."
+          value="{{desc}}"
+          bindinput="onInput"
+          maxlength="200"
+          show-confirm-bar="{{false}}"
+          auto-height="{{true}}"
+        />
+      </view>
+
+      <!-- 生成按钮 -->
+      <button class="submit-btn" bindtap="onSubmit" disabled="{{loading}}">
+        {{loading ? '幸运生成中...' : '生成我的幸运数字'}}
+      </button>
+
+      <!-- 生成结果展示 -->
+      <view wx:if="{{hasGenerated && lotteryNumbers && lotteryNumbers.length > 0}}" class="lottery-container">
+        <view class="lottery-title">你的幸运数字</view>
+        <view class="lottery-numbers">
+          <view wx:for="{{lotteryNumbers}}" wx:key="index" class="lottery-ball {{index < 6 ? 'red' : 'blue'}}">
+            {{item}}
+          </view>
         </view>
       </view>
+      
+      <view wx:if="{{hasGenerated && recommendation}}" class="recommendation-container">
+        <view class="recommendation-title">推荐理由</view>
+        <view class="recommendation-text">{{recommendation}}</view>
+      </view>
     </view>
-    <view wx:if="{{recommendation}}" class="recommendation-container">
-      <view class="recommendation-title">推荐理由</view>
-      <view class="recommendation-text">{{recommendation}}</view>
+
+    <!-- 每日分享 Tab -->
+    <view wx:if="{{activeTab === 'share'}}" class="tab-content">
+      <view class="share-list">
+        <view wx:for="{{shareList}}" wx:key="id" class="share-item">
+          <view class="share-header">
+            <image class="user-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+            <view class="user-info">
+              <text class="user-name">{{item.userName}}</text>
+              <text class="share-time">{{item.time}}</text>
+            </view>
+          </view>
+          <view class="share-content">{{item.content}}</view>
+          <view class="share-actions">
+            <view class="like-btn {{item.isLiked ? 'liked' : ''}}" bindtap="toggleLike" data-id="{{item.id}}">
+              <text class="like-icon">{{item.isLiked ? '❤️' : '🤍'}}</text>
+              <text class="like-count">{{item.likeCount}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
     </view>
   </view>
 </scroll-view> 

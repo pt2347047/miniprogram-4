@@ -1,0 +1,274 @@
+<!--tools.wxml-->
+<navigation-bar title="实用工具" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+
+<!-- Tab切换 -->
+<view class="tab-container">
+  <view class="tab-item {{activeTab === 'random' ? 'active' : ''}}" bindtap="switchTab" data-tab="random">
+    听天命
+  </view>
+  <view class="tab-item {{activeTab === 'specify' ? 'active' : ''}}" bindtap="switchTab" data-tab="specify">
+    尽人事
+  </view>
+  <view class="tab-item {{activeTab === 'history' ? 'active' : ''}}" bindtap="switchTab" data-tab="history">
+    蓦回首
+  </view>
+</view>
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <!-- 听天命 Tab -->
+    <view wx:if="{{activeTab === 'random'}}" class="tab-content">
+      <view class="control-row">
+        <view class="control-left">
+          <text class="label">生成组数：</text>
+          <picker class="picker" range="{{countOptions}}" value="{{selectedCount}}" bindchange="onCountChange">
+            <view class="picker-text">{{countOptions[selectedCount]}}</view>
+          </picker>
+        </view>
+        <button class="generate-btn-small" bindtap="generateRandom" disabled="{{generating}}">
+          {{generating ? '生成中...' : 'Go'}}
+        </button>
+      </view>
+      
+      <!-- 结果展示区域 -->
+      <view class="results-container" wx:if="{{randomResults.length > 0}}">
+        <view wx:for="{{randomResults}}" wx:key="index" class="result-item">
+          <view class="lottery-numbers">
+            <view wx:for="{{item.redBalls}}" wx:for-item="ball" wx:key="ballIndex" class="lottery-ball red">
+              {{ball < 10 ? '0' + ball : ball}}
+            </view>
+            <view class="lottery-ball blue">
+              {{item.blueBall < 10 ? '0' + item.blueBall : item.blueBall}}
+            </view>
+          </view>
+        </view>
+        
+        <!-- 导入按钮 -->
+        <view class="import-section">
+          <button class="import-btn" bindtap="importToLuckyList">加入幸运列表</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 尽人事 Tab -->
+    <view wx:if="{{activeTab === 'specify'}}" class="tab-content">
+      <!-- 主要球展示区域 -->
+      <view class="main-balls-container">
+        <view class="main-balls-title">选择你的幸运数字</view>
+        <view class="main-balls">
+          <!-- 6个红球 -->
+          <view 
+            wx:for="{{mainRedBalls}}" 
+            wx:key="index" 
+            class="main-ball red {{item.selected ? 'selected' : ''}} {{item.value ? 'has-value' : ''}}"
+            bindtap="onRedBallTap"
+            data-index="{{index}}"
+          >
+            {{item.value || '?'}}
+          </view>
+          <!-- 1个蓝球 -->
+          <view 
+            class="main-ball blue {{mainBlueBall.selected ? 'selected' : ''}} {{mainBlueBall.value ? 'has-value' : ''}}"
+            bindtap="onBlueBallTap"
+          >
+            {{mainBlueBall.value || '?'}}
+          </view>
+        </view>
+      </view>
+
+      <!-- 红球选择区域 -->
+      <view wx:if="{{showRedSelector}}" class="selector-container">
+        <view class="selector-title">选择红球 (最多6个)</view>
+        <view class="selector-balls">
+          <view 
+            wx:for="{{redBallOptions}}" 
+            wx:key="value" 
+            class="selector-ball red {{item.selected ? 'selected' : ''}}"
+            bindtap="onRedOptionTap"
+            data-value="{{item.value}}"
+          >
+            {{item.value < 10 ? '0' + item.value : item.value}}
+          </view>
+        </view>
+        <view class="selector-actions">
+          <button class="selector-btn clear-btn" bindtap="clearRedSelection">清空</button>
+          <button class="selector-btn confirm-btn" bindtap="confirmRedSelection">确定</button>
+        </view>
+      </view>
+
+      <!-- 蓝球选择区域 -->
+      <view wx:if="{{showBlueSelector}}" class="selector-container">
+        <view class="selector-title">选择蓝球 (最多1个)</view>
+        <view class="selector-balls">
+          <view 
+            wx:for="{{blueBallOptions}}" 
+            wx:key="value" 
+            class="selector-ball blue {{item.selected ? 'selected' : ''}}"
+            bindtap="onBlueOptionTap"
+            data-value="{{item.value}}"
+          >
+            {{item.value < 10 ? '0' + item.value : item.value}}
+          </view>
+        </view>
+        <view class="selector-actions">
+          <button class="selector-btn clear-btn" bindtap="clearBlueSelection">清空</button>
+          <button class="selector-btn confirm-btn" bindtap="confirmBlueSelection">确定</button>
+        </view>
+      </view>
+
+      <!-- 生成控制区域 -->
+      <view class="control-row">
+        <view class="control-left">
+          <text class="label">生成组数：</text>
+          <picker class="picker" range="{{countOptions}}" value="{{selectedCount}}" bindchange="onCountChange">
+            <view class="picker-text">{{countOptions[selectedCount]}}</view>
+          </picker>
+        </view>
+        <button class="generate-btn-small" bindtap="generateSpecify" disabled="{{generating}}">
+          {{generating ? '生成中...' : 'Go'}}
+        </button>
+      </view>
+      
+      <!-- 结果展示区域 -->
+      <view class="results-container" wx:if="{{specifyResults.length > 0}}">
+        <view wx:for="{{specifyResults}}" wx:key="index" class="result-item {{item.matchesBlueBall ? 'matches-blue' : ''}} {{item.matchesRedBalls ? 'matches-red' : ''}}">
+          <view class="lottery-numbers">
+            <view wx:for="{{item.redBalls}}" wx:for-item="ball" wx:key="ballIndex" class="lottery-ball red {{selectedRedNumbers.includes(ball) ? 'matches' : ''}}">
+              {{ball < 10 ? '0' + ball : ball}}
+            </view>
+            <view class="lottery-ball blue {{item.matchesBlueBall ? 'matches' : ''}}">
+              {{item.blueBall < 10 ? '0' + item.blueBall : item.blueBall}}
+            </view>
+          </view>
+        </view>
+        
+        <!-- 导入按钮 -->
+        <view class="import-section">
+          <button class="import-btn" bindtap="importToLuckyList">加入幸运列表</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 蓦回首 Tab -->
+    <view wx:if="{{activeTab === 'history'}}" class="tab-content">
+      <!-- 主要球展示区域 -->
+      <view class="main-balls-container">
+        <view class="main-balls-title">选择你的幸运数字</view>
+        <view class="main-balls">
+          <!-- 6个红球 -->
+          <view 
+            wx:for="{{mainRedBalls}}" 
+            wx:key="index" 
+            class="main-ball red {{item.selected ? 'selected' : ''}} {{item.value ? 'has-value' : ''}}"
+            bindtap="onRedBallTap"
+            data-index="{{index}}"
+          >
+            {{item.value || '?'}}
+          </view>
+          <!-- 1个蓝球 -->
+          <view 
+            class="main-ball blue {{mainBlueBall.selected ? 'selected' : ''}} {{mainBlueBall.value ? 'has-value' : ''}}"
+            bindtap="onBlueBallTap"
+          >
+            {{mainBlueBall.value || '?'}}
+          </view>
+        </view>
+      </view>
+
+      <!-- 红球选择区域 -->
+      <view wx:if="{{showRedSelector}}" class="selector-container">
+        <view class="selector-title">选择红球 (最多6个)</view>
+        <view class="selector-balls">
+          <view 
+            wx:for="{{redBallOptions}}" 
+            wx:key="value" 
+            class="selector-ball red {{item.selected ? 'selected' : ''}}"
+            bindtap="onRedOptionTap"
+            data-value="{{item.value}}"
+          >
+            {{item.value < 10 ? '0' + item.value : item.value}}
+          </view>
+        </view>
+        <view class="selector-actions">
+          <button class="selector-btn clear-btn" bindtap="clearRedSelection">清空</button>
+          <button class="selector-btn confirm-btn" bindtap="confirmRedSelection">确定</button>
+        </view>
+      </view>
+
+      <!-- 蓝球选择区域 -->
+      <view wx:if="{{showBlueSelector}}" class="selector-container">
+        <view class="selector-title">选择蓝球 (最多1个)</view>
+        <view class="selector-balls">
+          <view 
+            wx:for="{{blueBallOptions}}" 
+            wx:key="value" 
+            class="selector-ball blue {{item.selected ? 'selected' : ''}}"
+            bindtap="onBlueOptionTap"
+            data-value="{{item.value}}"
+          >
+            {{item.value < 10 ? '0' + item.value : item.value}}
+          </view>
+        </view>
+        <view class="selector-actions">
+          <button class="selector-btn clear-btn" bindtap="clearBlueSelection">清空</button>
+          <button class="selector-btn confirm-btn" bindtap="confirmBlueSelection">确定</button>
+        </view>
+      </view>
+
+      <!-- 控制区域 -->
+      <view class="control-row">
+        <text class="label">重复红球：</text>
+        <picker class="picker" range="{{redBallCountOptions}}" value="{{selectedRedBallCount}}" bindchange="onRedBallCountChange">
+          <view class="picker-text">{{redBallCountOptions[selectedRedBallCount]}}</view>
+        </picker>
+      </view>
+      <view class="control-row">
+        <text class="label">重复蓝球：</text>
+        <picker class="picker" range="{{blueBallCountOptions}}" value="{{selectedBlueBallCount}}" bindchange="onBlueBallCountChange">
+          <view class="picker-text">{{blueBallCountOptions[selectedBlueBallCount]}}</view>
+        </picker>
+      </view>
+      <view class="control-row">
+        <view class="control-left">
+          <text class="label">生成组数：</text>
+          <picker class="picker" range="{{countOptions}}" value="{{selectedCount}}" bindchange="onCountChange">
+            <view class="picker-text">{{countOptions[selectedCount]}}</view>
+          </picker>
+        </view>
+        <button class="generate-btn-small" bindtap="generateHistory" disabled="{{generating}}">
+          {{generating ? '生成中...' : 'Go'}}
+        </button>
+      </view>
+      
+      <!-- 结果展示区域 -->
+      <view class="results-container" wx:if="{{historyResults.length > 0}}">
+        <view class="result-summary">
+          总共 {{historyResults.length}} 组满足条件
+        </view>
+        <view wx:for="{{historyResults}}" wx:key="index" class="result-item {{item.matchesBlueBall ? 'matches-blue' : ''}} {{item.matchesRedBalls ? 'matches-red' : ''}}">
+          <view class="lottery-numbers">
+            <view wx:for="{{item.redBalls}}" wx:for-item="ball" wx:key="ballIndex" class="lottery-ball red {{selectedRedNumbers.includes(ball) ? 'matches' : ''}}">
+              {{ball < 10 ? '0' + ball : ball}}
+            </view>
+            <view class="lottery-ball blue {{item.matchesBlueBall ? 'matches' : ''}}">
+              {{item.blueBall < 10 ? '0' + item.blueBall : item.blueBall}}
+            </view>
+          </view>
+        </view>
+        
+        <!-- 导入按钮 -->
+        <view class="import-section">
+          <button class="import-btn" bindtap="importToLuckyList">加入幸运列表</button>
+        </view>
+      </view>
+      <view wx:if="{{historyResults.length === 0 && hasSearched}}" class="no-results">
+        没有满足条件的号码
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 导入成功后的跳转按钮 -->
+<view wx:if="{{showImportSuccess}}" class="import-success-section">
+  <button class="navigate-btn" bindtap="navigateToProfile">查看我的幸运列表</button>
+</view> 
